@@ -1,0 +1,40 @@
+{% extends "body.html" %}
+
+{% block content %}
+
+<article class="post page post-full">
+  <header class="post-header inner-md">
+    <h1 class="post-title">{{ page.params.title }}</h1>
+    {% if page.params.subtitle %}
+    <div class="post-subtitle">
+      {{ page.params.subtitle | safe }}
+    </div><!-- .post-subtitle -->
+    {% endif %}
+  </header><!-- .post-header -->
+  {% if page.params.img_path %}
+  <div class="post-thumbnail">
+    <img class="thumbnail" src="{{ page.params.img_path | relative_url }}" alt="{{ page.params.img_alt }}" />
+  </div>
+  {% endif %}
+  <div class="post-content inner-md">
+
+    {{ page.content }}
+
+    <form name="{{ page.params.form_id }}" id="{{ page.params.form_id }}" {% if page.params.form_action %} action="{{ page.params.form_action }}" {% endif %}method="POST" data-netlify="true" data-netlify-honeypot="bot-field">
+      <div class="screen-reader-text">
+        <label>Don't fill this out if you're human: <input name="bot-field" /></label>
+      </div>
+      <input type="hidden" name="form-name" value="{{ page.params.form_id }}" />
+      {% for field in page.params.form_fields %}
+        {% set include_dict = {'field': field} %}
+        {% include "form_field.html" %}
+      {% endfor %}
+      <div class="form-submit">
+        <button type="submit" class="button">{{ page.params.submit_label }}</button>
+      </div>
+    </form>
+
+  </div><!-- .post-content -->
+</article><!-- .post -->
+
+{% endblock %}
